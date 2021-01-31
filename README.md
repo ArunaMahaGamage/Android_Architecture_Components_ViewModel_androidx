@@ -12,52 +12,48 @@ https://developer.android.com/reference/android/arch/lifecycle/ViewModel
 Add Below Class
         public class MainActivity extends AppCompatActivity {
 
-            TextView tv_first_name, tv_first_name_new;
+			TextView tv_first_name, tv_first_name_new;
+			Button btn_data;
 
-            @Override
-            protected void onCreate(Bundle savedInstanceState) {
-                super.onCreate(savedInstanceState);
-                setContentView(R.layout.activity_main);
+			@Override
+			protected void onCreate(Bundle savedInstanceState) {
+				super.onCreate(savedInstanceState);
+				setContentView(R.layout.activity_main);
 
-                tv_first_name = findViewById(R.id.tv_first_name);
-                tv_first_name_new = findViewById(R.id.tv_first_name_new);
+				tv_first_name = findViewById(R.id.tv_first_name);
+				tv_first_name_new = findViewById(R.id.tv_first_name_new);
+				btn_data = findViewById(R.id.btn_data);
 
-                // Old Form
-        //        final UserViewModel viewModel1 = ViewModelProviders.of(this).get(UserViewModel.class);
-                final UserViewModel viewModel2 = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(UserViewModel.class);
+				UserViewModel viewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
-                viewModel2.userLiveData.observe(this, new Observer<User>() {
-                    @Override
-                    public void onChanged(User user) {
-                        // update ui.
-                        tv_first_name.setText(user.getFirstName());
-                    }
-                });
+				viewModel.userLiveData.observe(this, new Observer<User>() {
+					@Override
+					public void onChanged(User user) {
+						// update ui.
+						tv_first_name.setText(user.getFirstName() + " " + user.getLastName());
+					}
+				});
 
-                // New Form
-                UserViewModel viewModels = new UserViewModel();
+				btn_data.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						viewModel.doAction();
+						tv_first_name_new.setText("Portrait and landscape layout change");
+					}
+				});
 
-                viewModels.userLiveData.observe(this, new Observer<User>() {
-                    @Override
-                    public void onChanged(User user) {
-                        // update ui.
-                        tv_first_name_new.setText(user.getFirstName() + " " + user.getLastName());
-                    }
-                });
+				Log.e("MainActivity ", "hashCode_view_model:" + viewModel.hashCode());
 
-            /*
-            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-                    // In Fragment
+				/*
+				++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+						// In Fragment
 
-                // Old Form
-                UserModel userModel = ViewModelProviders.of(getActivity()).get(UserModel.class);
+						UserViewModel viewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
 
-                // New Form
-                UserViewModel viewModels = new UserViewModel();
-            ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            */
-            }
-        }
+				++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+				*/
+			}
+		}
         
 # Add Below XML
 
