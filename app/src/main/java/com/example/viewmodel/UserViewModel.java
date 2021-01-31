@@ -10,7 +10,7 @@ public class UserViewModel extends ViewModel {
 
     public UserViewModel() {
         // trigger user load.
-        doAction();
+//        doAction();
     }
 
     void doAction() {
